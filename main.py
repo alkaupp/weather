@@ -19,7 +19,7 @@ def create_output_from_response(response):
     return output
 
 
-def parse():
+def parse_args_for_url():
     parser = ArgumentParser(
         description='Get weather for a location in a country',
         usage='weather [location] [country]'
@@ -36,7 +36,7 @@ def parse():
 
 
 if __name__ == '__main__':
-    url = parse()
+    url = parse_args_for_url()
     response = urlopen(url)
     print(create_output_from_response(response.read()))
 
