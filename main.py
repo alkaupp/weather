@@ -4,7 +4,7 @@ import os
 from argparse import ArgumentParser
 from urllib.request import urlopen
 
-API_URL = 'http://api.openweathermap.org/data/2.5/weather?q=%s,%s&APPID=%s&units=metric'
+API_URL = 'https://api.openweathermap.org/data/2.5/weather?q=%s,%s&APPID=%s&units=metric'
 
 
 def create_output_from_response(response):
@@ -43,6 +43,13 @@ def parse_args_for_url():
 
 
 if __name__ == '__main__':
-    url = parse_args_for_url()
-    response = urlopen(url)
-    print(create_output_from_response(response.read()))
+    try:
+        url = parse_args_for_url()
+        response = urlopen(url)
+        print(create_output_from_response(response.read()))
+    except KeyError as error:
+        print(
+            'API key required for Open Weather Map\n'
+            'You can provide it by using the --api-key=mykey flag.\n'
+            'Alternatively you can export OPEN_WEATHER_MAP_API_KEY=mykey.'
+        )
