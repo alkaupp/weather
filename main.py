@@ -3,9 +3,10 @@ import json
 import os
 from argparse import ArgumentParser
 from urllib.error import HTTPError
+from urllib.parse import urlencode
 from urllib.request import urlopen
 
-API_URL = 'https://api.openweathermap.org/data/2.5/weather?q=%s,%s&APPID=%s&units=metric'
+API_URL = 'https://api.openweathermap.org/data/2.5/weather?'
 
 
 def create_output_from_response(response):
@@ -40,7 +41,9 @@ def parse_args_for_url():
         default=os.environ['OPEN_WEATHER_MAP_API_KEY']
     )
     args = parser.parse_args()
-    return API_URL % (args.location, args.country, args.api_key)
+    location_and_country = '%s,%s' % (args.location, args.country)
+    query_params = {'q': location_and_country, 'APPID': args.api_key, 'units': 'metric'}
+    return API_URL + urlencode(query_params)
 
 
 if __name__ == '__main__':

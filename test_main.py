@@ -41,7 +41,7 @@ class ScripTestCase(unittest.TestCase):
         sys.argv.append('usa')
         os.environ['OPEN_WEATHER_MAP_API_KEY'] = 'rofl'
         url = parse_args_for_url()
-        self.assertEqual('https://api.openweathermap.org/data/2.5/weather?q=boston,usa&APPID=rofl&units=metric', url)
+        self.assertEqual('https://api.openweathermap.org/data/2.5/weather?q=boston%2Cusa&APPID=rofl&units=metric', url)
 
 
 if __name__ == '__main__':
