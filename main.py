@@ -8,7 +8,7 @@ API_URL = 'http://api.openweathermap.org/data/2.5/weather?q=%s,%s&APPID=%s&units
 
 
 def create_output_from_response(response):
-    json_contents = json.loads(response.read())
+    json_contents = json.loads(response)
     output = '%s, %s: ' % (json_contents.get('name'), json_contents.get('sys').get('country'))
     output += '%s\n' % (json_contents.get('weather')[0].get('description'))
     output += '-' * len(output)
@@ -38,5 +38,5 @@ def parse():
 if __name__ == '__main__':
     url = parse()
     response = urlopen(url)
-    print(create_output_from_response(response))
+    print(create_output_from_response(response.read()))
 
