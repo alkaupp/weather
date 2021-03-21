@@ -11,10 +11,10 @@ def create_output_from_response(response):
     output = '%s, %s: ' % (json_contents.get('name'), json_contents.get('sys').get('country'))
     output += '%s\n' % (json_contents.get('weather')[0].get('description'))
     output += '-' * len(output)
-    output += '\nTemperature: %s C\n' % json_contents.get('main').get('temp')
-    output += 'Feels like: %s C\n' % json_contents.get('main').get('feels_like')
-    output += 'Humidity: %s %%\n' % json_contents.get('main').get('humidity')
-    output += 'Wind speed: %s' % json_contents.get('wind').get('speed')
+    output += '\n🌡️  Temperature: %s C\n' % json_contents.get('main').get('temp')
+    output += '⚖️  Feels like: %s C\n' % json_contents.get('main').get('feels_like')
+    output += '💦 Humidity: %s %%\n' % json_contents.get('main').get('humidity')
+    output += '🌬  Wind speed: %s m/s' % json_contents.get('wind').get('speed')
     return output
 
 
