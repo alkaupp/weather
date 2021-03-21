@@ -9,14 +9,21 @@ API_URL = 'http://api.openweathermap.org/data/2.5/weather?q=%s,%s&APPID=%s&units
 
 def create_output_from_response(response):
     json_contents = json.loads(response)
-    output = '%s, %s: ' % (json_contents.get('name'), json_contents.get('sys').get('country'))
-    output += '%s\n' % (json_contents.get('weather')[0].get('description'))
-    output += '-' * len(output)
-    output += '\n🌡️  Temperature: %s C\n' % json_contents.get('main').get('temp')
-    output += '⚖️  Feels like: %s C\n' % json_contents.get('main').get('feels_like')
-    output += '💦 Humidity: %s %%\n' % json_contents.get('main').get('humidity')
-    output += '🌬  Wind speed: %s m/s' % json_contents.get('wind').get('speed')
-    return output
+    header = '%s, %s: %s\n' % (
+        json_contents.get('name'),
+        json_contents.get('sys').get('country'),
+        json_contents.get('weather')[0].get('description')
+    )
+    return ''.join(
+        [
+            header,
+            '-' * len(header),
+            '\n🌡️  Temperature: %s C\n' % json_contents.get('main').get('temp'),
+            '⚖️  Feels like: %s C\n' % json_contents.get('main').get('feels_like'),
+            '💦 Humidity: %s %%\n' % json_contents.get('main').get('humidity'),
+            '🌬  Wind speed: %s m/s' % json_contents.get('wind').get('speed')
+        ]
+    )
 
 
 def parse_args_for_url():
@@ -39,4 +46,3 @@ if __name__ == '__main__':
     url = parse_args_for_url()
     response = urlopen(url)
     print(create_output_from_response(response.read()))
-
