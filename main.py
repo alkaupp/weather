@@ -11,7 +11,7 @@ API_URL = 'https://api.openweathermap.org/data/2.5/weather?'
 
 def create_output_from_response(response):
     json_contents = json.loads(response)
-    header = '%s, %s: %s\n' % (
+    header = '🌍 %s, %s: %s\n' % (
         json_contents.get('name'),
         json_contents.get('sys').get('country'),
         json_contents.get('weather')[0].get('description')
