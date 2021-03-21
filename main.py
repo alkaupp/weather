@@ -2,6 +2,7 @@
 import json
 import os
 from argparse import ArgumentParser
+from urllib.error import HTTPError
 from urllib.request import urlopen
 
 API_URL = 'https://api.openweathermap.org/data/2.5/weather?q=%s,%s&APPID=%s&units=metric'
@@ -53,3 +54,10 @@ if __name__ == '__main__':
             'You can provide it by using the --api-key=mykey flag.\n'
             'Alternatively you can export OPEN_WEATHER_MAP_API_KEY=mykey.'
         )
+    except HTTPError as error:
+        if error.code == 404:
+            print('error: Could not find location')
+
+        if error.code == 401:
+            print('API KEY is not valid')
+
