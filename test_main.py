@@ -1,11 +1,12 @@
 import os
 import sys
 import unittest
-from main import create_output_from_response, parse_args_for_url
+from main import WeatherScript, MeasurementUnit, build_weather_script
 
 
 class ScripTestCase(unittest.TestCase):
     def setUp(self) -> None:
+        self.weather_script = WeatherScript('martinlaakso', 'fi', 'blabla', MeasurementUnit('metric', 'C', 'm/s'))
         sys.argv.clear()
 
     def test_output_is_well_formatted(self):
@@ -17,21 +18,21 @@ class ScripTestCase(unittest.TestCase):
             b'"sunset":1616344589},"timezone":7200,"id":6691859,"name":"Martinlaakso","cod":200}'
         )
         expected_output = (
-            'Martinlaakso, FI: broken clouds\n'
-            '--------------------------------\n'
+            '🌍 Martinlaakso, FI: broken clouds\n'
+            '----------------------------------\n'
             '🌡️  Temperature: 2.62 C\n'
             '⚖️  Feels like: -4.74 C\n'
             '💦 Humidity: 69 %\n'
             '🌬  Wind speed: 7.2 m/s'
         )
-        self.assertEqual(expected_output, create_output_from_response(response))
+        self.assertEqual(expected_output, self.weather_script.create_output_from_response(response))
 
     def test_parse_args_throws_key_error(self):
         try:
             sys.argv.append('weather')
             sys.argv.append('boston')
             sys.argv.append('usa')
-            parse_args_for_url()
+            build_weather_script()
         except KeyError as error:
             self.assertEqual('OPEN_WEATHER_MAP_API_KEY', error.args[0])
 
@@ -40,7 +41,7 @@ class ScripTestCase(unittest.TestCase):
         sys.argv.append('boston')
         sys.argv.append('usa')
         os.environ['OPEN_WEATHER_MAP_API_KEY'] = 'rofl'
-        url = parse_args_for_url()
+        url = build_weather_script().build_url()
         self.assertEqual('https://api.openweathermap.org/data/2.5/weather?q=boston%2Cusa&APPID=rofl&units=metric', url)
 
 

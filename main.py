@@ -6,29 +6,50 @@ from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
-API_URL = 'https://api.openweathermap.org/data/2.5/weather?'
+
+class MeasurementUnit:
+    def __init__(self, name: str, temperature: str, wind_speed: str):
+        self.name = name
+        self.temperature = temperature
+        self.wind_speed = wind_speed
 
 
-def create_output_from_response(response):
-    json_contents = json.loads(response)
-    header = '🌍 %s, %s: %s\n' % (
-        json_contents.get('name'),
-        json_contents.get('sys').get('country'),
-        json_contents.get('weather')[0].get('description')
-    )
-    return ''.join(
-        [
-            header,
-            '-' * len(header),
-            '\n🌡️  Temperature: %s C\n' % json_contents.get('main').get('temp'),
-            '⚖️  Feels like: %s C\n' % json_contents.get('main').get('feels_like'),
-            '💦 Humidity: %s %%\n' % json_contents.get('main').get('humidity'),
-            '🌬  Wind speed: %s m/s' % json_contents.get('wind').get('speed')
-        ]
-    )
+class WeatherScript:
+    def __init__(self, location: str, country: str, api_key: str, measurement_unit: MeasurementUnit):
+        self.measurement_unit = measurement_unit
+        self.api_key = api_key
+        self.country = country
+        self.location = location
+        self.API_URL = 'https://api.openweathermap.org/data/2.5/weather?'
+
+    def run(self):
+        print(self.create_output_from_response(urlopen(self.build_url()).read()))
+
+    def create_output_from_response(self, response):
+        json_contents = json.loads(response)
+        header = '🌍 %s, %s: %s\n' % (
+            json_contents.get('name'),
+            json_contents.get('sys').get('country'),
+            json_contents.get('weather')[0].get('description')
+        )
+        return ''.join(
+            [
+                header,
+                '-' * len(header),
+                '\n🌡️  Temperature: %s %s\n' % (json_contents.get('main').get('temp'), self.measurement_unit.temperature),
+                '⚖️  Feels like: %s %s\n' % (json_contents.get('main').get('feels_like'), self.measurement_unit.temperature),
+                '💦 Humidity: %s %%\n' % json_contents.get('main').get('humidity'),
+                '🌬  Wind speed: %s %s' % (json_contents.get('wind').get('speed'), self.measurement_unit.wind_speed)
+            ]
+        )
+
+    def build_url(self):
+        location_and_country = '%s,%s' % (self.location, self.country)
+        query_params = {'q': location_and_country, 'APPID': self.api_key, 'units': self.measurement_unit.name}
+        return self.API_URL + urlencode(query_params)
 
 
-def parse_args_for_url():
+def build_weather_script():
     parser = ArgumentParser(
         description='Get weather for a location in a country',
         usage='weather [location] [country]'
@@ -40,17 +61,18 @@ def parse_args_for_url():
         type=str, help='API key for Open Weather Map',
         default=os.environ['OPEN_WEATHER_MAP_API_KEY']
     )
+    parser.add_argument('--imperial', action='store_true')
     args = parser.parse_args()
-    location_and_country = '%s,%s' % (args.location, args.country)
-    query_params = {'q': location_and_country, 'APPID': args.api_key, 'units': 'metric'}
-    return API_URL + urlencode(query_params)
+    units = MeasurementUnit('metric', 'C', 'm/s')
+    if args.imperial:
+        units = MeasurementUnit('imperial', 'F', 'miles/h')
+    return WeatherScript(args.location, args.country, args.api_key, units)
 
 
 if __name__ == '__main__':
     try:
-        url = parse_args_for_url()
-        response = urlopen(url)
-        print(create_output_from_response(response.read()))
+        script = build_weather_script()
+        script.run()
     except KeyError as error:
         print(
             'API key required for Open Weather Map\n'
@@ -63,4 +85,3 @@ if __name__ == '__main__':
 
         if error.code == 401:
             print('API KEY is not valid')
-
