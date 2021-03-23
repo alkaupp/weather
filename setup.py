@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='weather',
     version='0.1',
-    description='lol',
+    description='CLI frontend for querying weather',
     packages=['weather'],
     entry_points={
         'console_scripts': ['weather = weather.__main__:main']
