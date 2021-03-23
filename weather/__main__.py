@@ -2,7 +2,7 @@ import os
 from argparse import ArgumentParser
 from urllib.error import HTTPError
 
-from .weather import MeasurementUnit, WeatherScript
+from .weather import MeasurementUnit, WeatherScript, OpenWeatherMapApi
 
 
 def build_weather_script():
@@ -22,7 +22,7 @@ def build_weather_script():
     units = MeasurementUnit('metric', 'C', 'm/s')
     if args.imperial:
         units = MeasurementUnit('imperial', 'F', 'miles/h')
-    return WeatherScript(args.location, args.country, args.api_key, units)
+    return WeatherScript(OpenWeatherMapApi(args.location, args.country, args.api_key, units.name), units)
 
 
 def main():
