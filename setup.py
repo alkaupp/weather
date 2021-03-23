@@ -6,7 +6,7 @@ setup(
     description='lol',
     packages=['weather'],
     entry_points={
-        'console_scripts': ['weather = weather.weather:main']
+        'console_scripts': ['weather = weather.__main__:main']
     },
     author='Aleksi Kauppila',
     author_email='aleksi.kauppila@gmail.com'
