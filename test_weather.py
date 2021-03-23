@@ -1,7 +1,7 @@
 import os
 import sys
 import unittest
-from main import WeatherScript, MeasurementUnit, build_weather_script
+from weather import WeatherScript, MeasurementUnit, build_weather_script
 
 
 class ScripTestCase(unittest.TestCase):
