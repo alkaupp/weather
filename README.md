@@ -1,3 +1,10 @@
+# Installation
+
+```sh
+git clone https://github.com/alkaupp/weather.git
+./install.sh
+```
+
 # Configuration
 
 First off, you'll need to [sign-up with Open Weather Map](https://home.openweathermap.org/users/sign_up) and get an API
