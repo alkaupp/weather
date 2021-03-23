@@ -21,6 +21,5 @@ jobs:
       with:
         python-version: 3.9
 
-    - name: Test with pytest
-      run: Execute unit tests
-        python -m unittest
+    - name: Execute unit tests
+      run: python -m unittest
