@@ -1,7 +1,7 @@
 import os
 import sys
 import unittest
-from weather import WeatherScript, MeasurementUnit, build_weather_script
+from .weather import WeatherScript, MeasurementUnit, build_weather_script
 
 
 class ScripTestCase(unittest.TestCase):
@@ -29,7 +29,7 @@ class ScripTestCase(unittest.TestCase):
 
     def test_parse_args_throws_key_error(self):
         try:
-            sys.argv.append('weather')
+            sys.argv.append('')
             sys.argv.append('boston')
             sys.argv.append('usa')
             build_weather_script()
@@ -37,7 +37,7 @@ class ScripTestCase(unittest.TestCase):
             self.assertEqual('OPEN_WEATHER_MAP_API_KEY', error.args[0])
 
     def test_parse_args(self):
-        sys.argv.append('weather')
+        sys.argv.append('')
         sys.argv.append('boston')
         sys.argv.append('usa')
         os.environ['OPEN_WEATHER_MAP_API_KEY'] = 'rofl'
