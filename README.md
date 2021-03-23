@@ -2,6 +2,7 @@
 
 ```sh
 git clone https://github.com/alkaupp/weather.git
+cd weather
 ./install.sh
 ```
 
