@@ -1,4 +1,5 @@
 import os
+import sys
 from argparse import ArgumentParser
 from urllib.error import HTTPError
 
@@ -29,15 +30,19 @@ def main():
     try:
         script = build_weather_script()
         script.run()
+        sys.exit(0)
     except KeyError as error:
         print(
             'API key required for Open Weather Map\n'
             'You can provide it by using the --api-key=mykey flag.\n'
             'Alternatively you can export OPEN_WEATHER_MAP_API_KEY=mykey.'
         )
+        sys.exit(-1)
     except HTTPError as error:
         if error.code == 404:
             print('error: Could not find location')
 
         if error.code == 401:
             print('API KEY is not valid')
+
+        sys.exit(-1)
